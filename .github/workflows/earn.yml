@@ -1,0 +1,29 @@
+name: 9Hits_Power_Bot
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # এই কন্টেইনার ইমেজটিতে সব লাইব্রেরি আগে থেকেই আছে, তাই ১০০% কাজ করবে
+    container:
+      image: mcr.microsoft.com/playwright:v1.40.0-jammy 
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run 9Hits Viewer
+        run: |
+          # সরাসরি ডাউনলোড এবং আনজিপ
+          curl -sL https://9hits.com/downloads/v3/9hits-viewer-linux-x64.tar.bz2 | tar -xj
+          
+          # ফাইল পারমিশন ঠিক করা
+          chmod +x ./9hits-viewer-linux-x64/9hits-viewer
+          
+          # আপনার এপিআই কী দিয়ে রান করা
+          ./9hits-viewer-linux-x64/9hits-viewer --token=08aa8c374e5713f7a572bae472c75cc4 --allow-ca --session=s1 &
+          ./9hits-viewer-linux-x64/9hits-viewer --token=08aa8c374e5713f7a572bae472c75cc4 --allow-ca --session=s2
+          
+          # বটের কাজ চালু রাখার জন্য সময় (৫-৬ ঘণ্টা)
+          sleep 21000
